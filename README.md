@@ -4,9 +4,10 @@ Voici une application Flutter de Gestion pour service médicale cross-platform I
 
 Inclus :
 
-- Gestion voitures
-- Gestion clients
+- Gestion patient
+- Gestion calendrier
 - Gestion employés
+- Gestion des médecins
 
 ## Getting Started
 
