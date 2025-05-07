@@ -24,10 +24,10 @@ class DBHelper {
     await db.execute('''
       CREATE TABLE patients (
         id TEXT PRIMARY KEY,
-        nom TEXT,
-        prenom TEXT,
-        telephone TEXT,
-        email TEXT,
+        nom TEXT NOT NULL,
+        prenom TEXT NOT NULL,
+        telephone TEXT NOT NULL UNIQUE,
+        email TEXT NOT NULL UNIQUE,
         adresse TEXT,
         lastModified TEXT
       )
@@ -36,7 +36,19 @@ class DBHelper {
 
   Future<void> insertPatient(Patient patient) async {
     final db = await database;
-    await db.insert('patients', patient.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+    try {
+      await db.insert(
+        'patients',
+        patient.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.fail,
+      );
+    } catch (e) {
+      if (e.toString().contains('UNIQUE constraint failed')) {
+        throw Exception('Téléphone ou e-mail déjà utilisé.');
+      } else {
+        rethrow;
+      }
+    }
   }
 
   Future<List<Patient>> getAllPatients() async {

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "596270167480",
+    "project_id": "projet-medical-management-fl",
+    "storage_bucket": "projet-medical-management-fl.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:596270167480:android:1a2a822ea11d8a16098b4d",
+        "android_client_info": {
+          "package_name": "com.example.projet_medical_management_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1Txs9-Ctqguzb03V95ih8jhcMbVQ_WUA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

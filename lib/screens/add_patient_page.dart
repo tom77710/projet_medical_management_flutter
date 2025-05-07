@@ -43,14 +43,34 @@ class _AddPatientPageState extends State<AddPatientPage> {
       );
       await db.insertPatient(patient);
       if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Patient ajouté avec succès.')),
+      );
+      await Future.delayed(const Duration(milliseconds: 500));
       Navigator.pop(context, true);
     }
+  }
+
+  int _selectedIndex = 3;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      Navigator.pop(context);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Ajouter un patient')),
+      resizeToAvoidBottomInset: true,
+      appBar: AppBar(
+        title: const Text('Ajouter un patient'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -59,38 +79,80 @@ class _AddPatientPageState extends State<AddPatientPage> {
             children: [
               TextFormField(
                 controller: _nomController,
+                keyboardType: TextInputType.text,
                 decoration: const InputDecoration(labelText: 'Nom'),
-                validator: (value) => value!.isEmpty ? 'Champ requis' : null,
+                validator: (value) =>
+                value == null || value.isEmpty ? 'Champ requis' : null,
               ),
               TextFormField(
                 controller: _prenomController,
+                keyboardType: TextInputType.text,
                 decoration: const InputDecoration(labelText: 'Prénom'),
-                validator: (value) => value!.isEmpty ? 'Champ requis' : null,
+                validator: (value) =>
+                value == null || value.isEmpty ? 'Champ requis' : null,
               ),
               TextFormField(
                 controller: _telephoneController,
-                keyboardType: TextInputType.phone,
+                keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: 'Téléphone'),
-                validator: (value) => value!.isEmpty ? 'Champ requis' : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) return 'Champ requis';
+                  if (!RegExp(r'^\d{10}$').hasMatch(value)) {
+                    return 'Téléphone invalide';
+                  }
+                  return null;
+                },
               ),
               TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(labelText: 'Email'),
-                validator: (value) => value!.isEmpty ? 'Champ requis' : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) return 'Champ requis';
+                  if (!RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$')
+                      .hasMatch(value)) {
+                    return 'Email invalide';
+                  }
+                  return null;
+                },
               ),
               TextFormField(
                 controller: _adresseController,
-                decoration: const InputDecoration(labelText: 'Adresse (optionnel)'),
+                keyboardType: TextInputType.text,
+                decoration:
+                const InputDecoration(labelText: 'Adresse (optionnel)'),
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _savePatient,
-                child: const Text('Enregistrer'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                    child: const Text('Annuler'),
+                  ),
+                  ElevatedButton(
+                    onPressed: _savePatient,
+                    child: const Text('Enregistrer'),
+                  ),
+                ],
               )
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        selectedItemColor: Colors.deepPurple,
+        unselectedItemColor: Colors.black,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.event_note), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.medical_services), label: ''),
+        ],
       ),
     );
   }

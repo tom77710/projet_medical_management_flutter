@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart'; // Ajouté pour utiliser les options Firebase générées
+
 import 'screens/home_page.dart';
 import 'screens/agenda_page.dart';
 import 'screens/appointment_page.dart';
 import 'screens/patient_management_page.dart';
 import 'screens/personnel_management_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform, // Utilise les options correctes
+  );
   runApp(const MyApp());
 }
 
