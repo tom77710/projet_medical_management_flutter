@@ -33,6 +33,8 @@ projet_medical_management_flutter/
 │   ├── models/
 │   ├── screens/
 │   ├── services/
+│   ├── widgets/
+│   ├── firebase_options.dart
 │   └── main.dart
 ├── linux/
 ├── macos/
@@ -46,4 +48,3 @@ projet_medical_management_flutter/
 ├── pubspec.lock
 ├── pubspec.yaml
 └── README.md
-

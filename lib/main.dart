@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart'; // Ajouté pour utiliser les options Firebase générées
+import 'firebase_options.dart';
 
 import 'screens/home_page.dart';
 import 'screens/agenda_page.dart';
@@ -11,7 +11,7 @@ import 'screens/personnel_management_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform, // Utilise les options correctes
+    options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
 }
@@ -42,12 +42,12 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = const [
-    HomePage(),
-    AgendaPage(),
-    AppointmentPage(),
-    PatientManagementPage(),
-    PersonnelManagementPage(),
+  final List<Widget> _pages = [
+    const HomePage(),
+    const AgendaPage(),
+    const AppointmentPage(),
+    const PatientManagementPage(),
+    const PersonnelManagementPage(),
   ];
 
   void _onItemTapped(int index) {

@@ -3,6 +3,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import '../models/patient.dart';
 import '../database/db_helper.dart';
 import '../services/firebase_sync_service.dart';
+import '../widgets/custom_app_bar.dart';
 import 'add_patient_page.dart';
 import 'edit_patient_page.dart';
 
@@ -67,8 +68,8 @@ class _PatientManagementPageState extends State<PatientManagementPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Gestion des patients'),
+      appBar: CustomAppBar(
+        title: 'Gestion des patients',
         actions: [
           IconButton(
             icon: const Icon(Icons.sync),

@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../models/patient.dart';
+import '../models/personnel.dart';
 
 class DBHelper {
   static final DBHelper instance = DBHelper._init();
@@ -32,8 +33,22 @@ class DBHelper {
         lastModified TEXT
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE personnel (
+        id TEXT PRIMARY KEY,
+        nom TEXT NOT NULL,
+        prenom TEXT NOT NULL,
+        telephone TEXT NOT NULL UNIQUE,
+        email TEXT NOT NULL UNIQUE,
+        emploi TEXT NOT NULL,
+        adresse TEXT,
+        lastModified TEXT
+      )
+    ''');
   }
 
+  // Patient methods
   Future<void> insertPatient(Patient patient) async {
     final db = await database;
     try {
@@ -79,6 +94,45 @@ class DBHelper {
       patient.toMap(),
       where: 'id = ?',
       whereArgs: [patient.id],
+    );
+  }
+
+  // Personnel methods
+  Future<void> insertPersonnel(Personnel personnel) async {
+    final db = await database;
+    try {
+      await db.insert(
+        'personnel',
+        personnel.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.fail,
+      );
+    } catch (e) {
+      if (e.toString().contains('UNIQUE constraint failed')) {
+        throw Exception('Téléphone ou e-mail déjà utilisé.');
+      } else {
+        rethrow;
+      }
+    }
+  }
+
+  Future<List<Personnel>> getPersonnel() async {
+    final db = await database;
+    final result = await db.query('personnel');
+    return result.map((e) => Personnel.fromMap(e)).toList();
+  }
+
+  Future<void> deletePersonnel(String id) async {
+    final db = await database;
+    await db.delete('personnel', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<void> updatePersonnel(Personnel personnel) async {
+    final db = await database;
+    await db.update(
+      'personnel',
+      personnel.toMap(),
+      where: 'id = ?',
+      whereArgs: [personnel.id],
     );
   }
 }
